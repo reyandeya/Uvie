@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +39,7 @@ fun ProfileScreen(
     onSignOut: () -> Unit
 ) {
     val profileStats by viewModel.profileStats.collectAsState()
+    var showSignOutDialog by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.loadProfile()
@@ -111,7 +113,7 @@ fun ProfileScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
-            onClick = { viewModel.signOut(onSuccess = onSignOut) },
+            onClick = { showSignOutDialog = true },
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier
@@ -120,6 +122,33 @@ fun ProfileScreen(
         ) {
             Text("Sign Out")
         }
+    }
+
+    if (showSignOutDialog) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { showSignOutDialog = false },
+            title = { Text(text = "Sign Out") },
+            text = { Text("Are you sure you want to sign out?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showSignOutDialog = false
+                        viewModel.signOut(onSuccess = onSignOut)
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) {
+                    Text("Yes, Sign Out")
+                }
+            },
+            dismissButton = {
+                androidx.compose.material3.TextButton(onClick = { showSignOutDialog = false }) {
+                    Text("Cancel", color = MaterialTheme.colorScheme.onSurface)
+                }
+            },
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            textContentColor = MaterialTheme.colorScheme.onSurface
+        )
     }
 }
 
