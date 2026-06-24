@@ -143,6 +143,7 @@ fun MovieDetailScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .horizontalScroll(rememberScrollState())
+
         ) {
             Button(
                 onClick = { viewModel.updateMovieStatus("watchlist") },

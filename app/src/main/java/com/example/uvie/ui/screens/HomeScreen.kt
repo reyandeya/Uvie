@@ -46,7 +46,7 @@ fun HomeScreen(
                 painter = painterResource(id = R.drawable.logo_uvie),
                 contentDescription = "Uvie Logo",
                 modifier = Modifier
-                    .padding(start = 16.dp, top = 48.dp, bottom = 16.dp)
+                    .padding(start = 16.dp, top = 8.dp, bottom = 16.dp)
                     .height(32.dp)
             )
             

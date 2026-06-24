@@ -50,7 +50,7 @@ fun TrendingCarousel(
         pageSpacing = 16.dp,
         modifier = modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(220.dp)
     ) { page ->
         val movie = movies[page]
         val formattedNumber = (page + 1).toString().padStart(2, '0')
