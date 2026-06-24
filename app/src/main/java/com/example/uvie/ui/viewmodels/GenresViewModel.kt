@@ -42,16 +42,18 @@ class GenresViewModel : ViewModel() {
         }
     }
 
-    fun selectGenre(genre: Genre) {
+    fun selectGenre(genre: Genre?) {
         _selectedGenre.value = genre
-        viewModelScope.launch {
-            _isLoading.value = true
-            try {
-                _moviesByGenre.value = repository.getMoviesByGenre(genre.id)
-            } catch (e: Exception) {
-                // Handle error
-            } finally {
-                _isLoading.value = false
+        if (genre != null) {
+            viewModelScope.launch {
+                _isLoading.value = true
+                try {
+                    _moviesByGenre.value = repository.getMoviesByGenre(genre.id)
+                } catch (e: Exception) {
+                    // Handle error
+                } finally {
+                    _isLoading.value = false
+                }
             }
         }
     }

@@ -1,6 +1,8 @@
 package com.example.uvie.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -55,33 +59,36 @@ fun WatchlistScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
     ) {
-        Text(
-            text = "My List",
-            color = MaterialTheme.colorScheme.onBackground,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(16.dp)
-        )
+        Spacer(modifier = Modifier.height(16.dp))
 
-        TabRow(
-            selectedTabIndex = tabs.indexOf(currentTab),
-            containerColor = MaterialTheme.colorScheme.background,
-            contentColor = UviePurple
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly
         ) {
             tabs.forEachIndexed { index, tab ->
-                Tab(
-                    selected = currentTab == tab,
-                    onClick = { viewModel.setTabAndLoad(tab) },
-                    text = { 
-                        Text(
-                            text = tabTitles[index],
-                            color = if (currentTab == tab) UviePurple else MaterialTheme.colorScheme.onBackground
-                        ) 
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.clickable { viewModel.setTabAndLoad(tab) }
+                ) {
+                    Text(
+                        text = tabTitles[index],
+                        color = if (currentTab == tab) UviePurple else MaterialTheme.colorScheme.onBackground.copy(alpha=0.7f),
+                        fontWeight = if (currentTab == tab) FontWeight.Bold else FontWeight.Normal,
+                        fontSize = 16.sp
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    if (currentTab == tab) {
+                        Box(modifier = Modifier.height(2.dp).width(40.dp).background(UviePurple))
+                    } else {
+                        Box(modifier = Modifier.height(2.dp).width(40.dp).background(androidx.compose.ui.graphics.Color.Transparent))
                     }
-                )
+                }
             }
         }
+        
+        Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn(
             contentPadding = PaddingValues(bottom = 80.dp),
@@ -125,18 +132,21 @@ fun WatchlistScreen(
                                 Button(
                                     onClick = { onNavigateToDetails(movie.movieId) },
                                     colors = ButtonDefaults.buttonColors(containerColor = UviePurple),
-                                    modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(20.dp)
+                                    shape = RoundedCornerShape(8.dp),
+                                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                                    modifier = Modifier.height(32.dp)
                                 ) {
-                                    Text("Details")
+                                    Text("DETAILS", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = androidx.compose.ui.graphics.Color.Black)
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Button(
                                     onClick = { viewModel.removeMovie(movie.movieId) },
-                                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                                    shape = RoundedCornerShape(20.dp)
+                                    colors = ButtonDefaults.buttonColors(containerColor = androidx.compose.ui.graphics.Color(0xFF993333)),
+                                    shape = RoundedCornerShape(8.dp),
+                                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                                    modifier = Modifier.height(32.dp)
                                 ) {
-                                    Text("Remove")
+                                    Text("REMOVE", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = androidx.compose.ui.graphics.Color.Black)
                                 }
                             }
                         }

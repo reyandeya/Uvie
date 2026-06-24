@@ -21,9 +21,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,7 +52,8 @@ import com.example.uvie.ui.viewmodels.MovieDetailViewModel
 fun MovieDetailScreen(
     viewModel: MovieDetailViewModel,
     movieId: Long,
-    onNavigateToSimilar: (Long) -> Unit
+    onNavigateToSimilar: (Long) -> Unit,
+    onNavigateBack: () -> Unit
 ) {
     val movie by viewModel.movieDetails.collectAsState()
     val cast by viewModel.cast.collectAsState()
@@ -87,6 +93,16 @@ fun MovieDetailScreen(
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background.copy(alpha = 0.5f))
             )
+            IconButton(
+                onClick = onNavigateBack,
+                modifier = Modifier.align(Alignment.TopStart).padding(top = 48.dp, start = 8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back",
+                    tint = androidx.compose.ui.graphics.Color.White
+                )
+            }
         }
 
         Row(modifier = Modifier.padding(16.dp).offset(y = (-60).dp)) {

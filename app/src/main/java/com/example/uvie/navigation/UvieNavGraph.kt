@@ -12,6 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.uvie.ui.components.UvieBottomBar
+import com.example.uvie.ui.screens.AboutScreen
+import com.example.uvie.ui.screens.AccountSettingsScreen
 import com.example.uvie.ui.screens.GenresScreen
 import com.example.uvie.ui.screens.HomeScreen
 import com.example.uvie.ui.screens.LoginScreen
@@ -30,7 +32,7 @@ import com.example.uvie.ui.viewmodels.SearchViewModel
 import com.example.uvie.ui.viewmodels.WatchlistViewModel
 
 @Composable
-fun UvieApp() {
+fun UvieApp(onToggleTheme: () -> Unit = {}) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -132,12 +134,31 @@ fun UvieApp() {
                 )
             }
             
-            composable("profile") { // In the mock design, "Finished" tab looks like Profile or Watched?
+            composable("profile") {
                 ProfileScreen(
                     viewModel = profileViewModel,
                     onSignOut = {
                         navController.navigate("login") { popUpTo(0) }
+                    },
+                    onNavigateToSettings = { navController.navigate("account_settings") },
+                    onNavigateToAbout = { navController.navigate("about") },
+                    onToggleTheme = onToggleTheme
+                )
+            }
+            
+            composable("account_settings") {
+                AccountSettingsScreen(
+                    viewModel = authViewModel,
+                    onNavigateBack = { navController.popBackStack() },
+                    onAccountDeleted = {
+                        navController.navigate("login") { popUpTo(0) }
                     }
+                )
+            }
+            
+            composable("about") {
+                AboutScreen(
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
             
@@ -148,7 +169,8 @@ fun UvieApp() {
                 MovieDetailScreen(
                     viewModel = detailViewModel,
                     movieId = movieId,
-                    onNavigateToSimilar = { id -> navController.navigate("movieDetail/$id") }
+                    onNavigateToSimilar = { id -> navController.navigate("movieDetail/$id") },
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
         }

@@ -58,7 +58,7 @@ fun UvieTheme(
         }
 
         darkTheme -> DarkColorScheme
-        else -> DarkColorScheme // Force dark theme for Uvie
+        else -> LightColorScheme
     }
 
     MaterialTheme(

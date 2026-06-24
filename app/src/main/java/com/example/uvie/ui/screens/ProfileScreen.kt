@@ -2,6 +2,7 @@ package com.example.uvie.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -36,7 +38,10 @@ import com.example.uvie.ui.viewmodels.ProfileViewModel
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
-    onSignOut: () -> Unit
+    onSignOut: () -> Unit,
+    onNavigateToSettings: () -> Unit,
+    onNavigateToAbout: () -> Unit,
+    onToggleTheme: () -> Unit
 ) {
     val profileStats by viewModel.profileStats.collectAsState()
     var showSignOutDialog by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
@@ -49,17 +54,10 @@ fun ProfileScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Profile",
-            color = MaterialTheme.colorScheme.onBackground,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.align(Alignment.Start)
-        )
-
         Spacer(modifier = Modifier.height(32.dp))
 
         Box(
@@ -80,16 +78,16 @@ fun ProfileScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = profileStats.name ?: "User",
+            text = (profileStats.username ?: "USERNAME").uppercase(),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = 20.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         )
 
         Text(
-            text = "@${profileStats.username ?: "username"}",
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-            fontSize = 16.sp
+            text = "${profileStats.username ?: "email"}@email.com", // Mock email since we don't have it in profileStats yet
+            color = UviePurple,
+            fontSize = 14.sp
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -102,13 +100,15 @@ fun ProfileScreen(
             StatCard(title = "Watched", count = profileStats.watchedCount, modifier = Modifier.weight(1f))
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+        androidx.compose.material3.Divider(color = MaterialTheme.colorScheme.onBackground.copy(alpha=0.3f), thickness = 1.dp, modifier = Modifier.padding(horizontal = 16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        ProfileMenuItem(title = "Account Settings")
+        ProfileMenuItem(title = "Theme", onClick = onToggleTheme)
         Spacer(modifier = Modifier.height(8.dp))
-        ProfileMenuItem(title = "App Preferences")
+        ProfileMenuItem(title = "Account Settings", onClick = onNavigateToSettings)
         Spacer(modifier = Modifier.height(8.dp))
-        ProfileMenuItem(title = "Help & Support")
+        ProfileMenuItem(title = "About", onClick = onNavigateToAbout)
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -153,43 +153,35 @@ fun ProfileScreen(
 }
 
 @Composable
-fun ProfileMenuItem(title: String) {
-    Card(
-        modifier = Modifier.fillMaxWidth().height(56.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        shape = RoundedCornerShape(12.dp)
+fun ProfileMenuItem(title: String, onClick: () -> Unit = {}) {
+    Box(
+        modifier = Modifier.fillMaxWidth().height(48.dp).clickable { onClick() },
+        contentAlignment = Alignment.CenterStart
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            Text(text = title, color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp)
-        }
+        Text(text = title, color = MaterialTheme.colorScheme.onBackground.copy(alpha=0.7f), fontSize = 16.sp, fontWeight = FontWeight.Bold)
     }
 }
 
 @Composable
 fun StatCard(title: String, count: Int, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        shape = RoundedCornerShape(12.dp)
+    Column(
+        modifier = modifier.padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = count.toString(),
-                color = UviePurple,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = title,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 12.sp
-            )
-        }
+        Text(
+            text = title,
+            color = UviePurple,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Box(modifier = Modifier.height(1.dp).fillMaxWidth().background(MaterialTheme.colorScheme.onBackground))
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = count.toString(),
+            color = UviePurple,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }

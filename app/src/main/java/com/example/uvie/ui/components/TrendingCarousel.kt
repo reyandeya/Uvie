@@ -53,40 +53,31 @@ fun TrendingCarousel(
             .height(200.dp)
     ) { page ->
         val movie = movies[page]
-        Box(
+        val formattedNumber = (page + 1).toString().padStart(2, '0')
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(16.dp))
+                .fillMaxWidth()
                 .clickable { onMovieClick(movie.id) }
         ) {
             AsyncImage(
                 model = "https://image.tmdb.org/t/p/w780${movie.backdropPath}",
                 contentDescription = "Backdrop for ${movie.title}",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)
+                    .clip(RoundedCornerShape(16.dp))
             )
             
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                contentAlignment = Alignment.BottomStart
-            ) {
-                Column {
-                    Text(
-                        text = movie.title,
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = "⭐ ${movie.voteAverage}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-            }
+            androidx.compose.foundation.layout.Spacer(modifier = Modifier.height(12.dp))
+            
+            Text(
+                text = "$formattedNumber ${movie.title}",
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }
