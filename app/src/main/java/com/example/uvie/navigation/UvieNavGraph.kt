@@ -1,5 +1,9 @@
 package com.example.uvie.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -67,7 +71,19 @@ fun UvieApp(onToggleTheme: () -> Unit = {}) {
         NavHost(
             navController = navController,
             startDestination = "splash",
-            modifier = Modifier.fillMaxSize().padding(bottom = innerPadding.calculateBottomPadding())
+            modifier = Modifier.fillMaxSize(),
+            enterTransition = {
+                fadeIn(animationSpec = tween(300))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(300))
+            },
+            popEnterTransition = {
+                fadeIn(animationSpec = tween(300))
+            },
+            popExitTransition = {
+                fadeOut(animationSpec = tween(300))
+            }
         ) {
             composable("splash") {
                 SplashScreen(

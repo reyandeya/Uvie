@@ -60,6 +60,7 @@ fun WatchlistScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
+            .padding(top = 24.dp)
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -127,26 +128,29 @@ fun WatchlistScreen(
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                             )
-                            Spacer(modifier = Modifier.weight(1f))
-                            Row {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.End
+                            ) {
                                 Button(
                                     onClick = { onNavigateToDetails(movie.movieId) },
                                     colors = ButtonDefaults.buttonColors(containerColor = UviePurple),
-                                    shape = RoundedCornerShape(8.dp),
-                                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-                                    modifier = Modifier.height(32.dp)
+                                    modifier = Modifier.width(120.dp).height(36.dp),
+                                    contentPadding = PaddingValues(0.dp)
                                 ) {
-                                    Text("DETAILS", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = androidx.compose.ui.graphics.Color.Black)
+                                    Text("Details", fontSize = 12.sp)
                                 }
-                                Spacer(modifier = Modifier.width(8.dp))
+                                
+                                Spacer(modifier = Modifier.height(8.dp))
+                                
                                 Button(
                                     onClick = { viewModel.removeMovie(movie.movieId) },
-                                    colors = ButtonDefaults.buttonColors(containerColor = androidx.compose.ui.graphics.Color(0xFF993333)),
-                                    shape = RoundedCornerShape(8.dp),
-                                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-                                    modifier = Modifier.height(32.dp)
+                                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error.copy(alpha=0.5f)),
+                                    modifier = Modifier.width(120.dp).height(36.dp),
+                                    contentPadding = PaddingValues(0.dp)
                                 ) {
-                                    Text("REMOVE", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = androidx.compose.ui.graphics.Color.Black)
+                                    Text("Remove", fontSize = 12.sp)
                                 }
                             }
                         }

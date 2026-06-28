@@ -93,19 +93,9 @@ fun MovieDetailScreen(
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background.copy(alpha = 0.5f))
             )
-            IconButton(
-                onClick = onNavigateBack,
-                modifier = Modifier.align(Alignment.TopStart).padding(top = 48.dp, start = 8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back",
-                    tint = androidx.compose.ui.graphics.Color.White
-                )
-            }
         }
 
-        Row(modifier = Modifier.padding(16.dp).offset(y = (-60).dp)) {
+        Row(modifier = Modifier.padding(16.dp).offset(y = (-40).dp)) {
             AsyncImage(
                 model = "https://image.tmdb.org/t/p/w500${details.posterPath}",
                 contentDescription = null,
@@ -142,34 +132,41 @@ fun MovieDetailScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
+                .offset(y = (-30).dp)
                 .horizontalScroll(rememberScrollState())
         ) {
             Button(
                 onClick = { viewModel.updateMovieStatus("watchlist") },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (movieStatus == "watchlist") UviePurple else MaterialTheme.colorScheme.surface
+                    containerColor = if (movieStatus == "watchlist") UviePurple else MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = if (movieStatus == "watchlist") androidx.compose.ui.graphics.Color.White else MaterialTheme.colorScheme.onSurface
                 ),
+                shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.padding(end = 8.dp)
-            ) { Text("Watchlist") }
+            ) { Text("Watchlist", fontWeight = FontWeight.Bold) }
             
             Button(
                 onClick = { viewModel.updateMovieStatus("watching") },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (movieStatus == "watching") UviePurple else MaterialTheme.colorScheme.surface
+                    containerColor = if (movieStatus == "watching") UviePurple else MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = if (movieStatus == "watching") androidx.compose.ui.graphics.Color.White else MaterialTheme.colorScheme.onSurface
                 ),
+                shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.padding(end = 8.dp)
-            ) { Text("Watching") }
+            ) { Text("Watching", fontWeight = FontWeight.Bold) }
             
             Button(
                 onClick = { viewModel.updateMovieStatus("watched") },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (movieStatus == "watched") UviePurple else MaterialTheme.colorScheme.surface
+                    containerColor = if (movieStatus == "watched") UviePurple else MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = if (movieStatus == "watched") androidx.compose.ui.graphics.Color.White else MaterialTheme.colorScheme.onSurface
                 ),
+                shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.padding(end = 8.dp)
-            ) { Text("Watched") }
+            ) { Text("Watched", fontWeight = FontWeight.Bold) }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "Overview",
@@ -242,6 +239,29 @@ fun MovieDetailScreen(
                         .padding(end = 12.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .clickable { onNavigateToSimilar(simMovie.id) }
+                )
+            }
+        }
+    }
+    
+    // Sticky Back Button
+    Box(modifier = Modifier.fillMaxSize()) {
+        androidx.compose.foundation.layout.Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 48.dp, start = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                onClick = onNavigateBack,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.background.copy(alpha = 0.5f))
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back",
+                    tint = androidx.compose.ui.graphics.Color.White
                 )
             }
         }

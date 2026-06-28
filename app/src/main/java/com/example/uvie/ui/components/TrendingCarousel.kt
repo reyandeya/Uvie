@@ -1,9 +1,11 @@
 package com.example.uvie.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +20,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,7 +54,7 @@ fun TrendingCarousel(
         pageSpacing = 16.dp,
         modifier = modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(280.dp)
     ) { page ->
         val movie = movies[page]
         val formattedNumber = (page + 1).toString().padStart(2, '0')
@@ -59,18 +63,17 @@ fun TrendingCarousel(
                 .fillMaxWidth()
                 .clickable { onMovieClick(movie.id) }
         ) {
-            AsyncImage(
-                model = "https://image.tmdb.org/t/p/w780${movie.backdropPath}",
-                contentDescription = "Backdrop for ${movie.title}",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
-                    .clip(RoundedCornerShape(16.dp))
-            )
-            
-            androidx.compose.foundation.layout.Spacer(modifier = Modifier.height(12.dp))
-            
+            Box(modifier = Modifier.fillMaxWidth().height(220.dp)) {
+                AsyncImage(
+                    model = "https://image.tmdb.org/t/p/w780${movie.backdropPath}",
+                    contentDescription = "Backdrop for ${movie.title}",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(16.dp))
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "$formattedNumber ${movie.title}",
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
@@ -79,5 +82,6 @@ fun TrendingCarousel(
                 overflow = TextOverflow.Ellipsis
             )
         }
+            
     }
 }

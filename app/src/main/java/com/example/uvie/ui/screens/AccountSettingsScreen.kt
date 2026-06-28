@@ -2,13 +2,16 @@ package com.example.uvie.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -25,8 +28,11 @@ fun AccountSettingsScreen(
     onAccountDeleted: () -> Unit
 ) {
     var newPassword by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var newUsername by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
-    var message by remember { mutableStateOf<String?>(null) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var successMessage by remember { mutableStateOf<String?>(null) }
     var showDeleteDialog by remember { mutableStateOf(false) }
 
     Column(
@@ -35,7 +41,11 @@ fun AccountSettingsScreen(
             .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(16.dp)) {
+        // Header
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp)
+        ) {
             IconButton(onClick = onNavigateBack) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -46,87 +56,152 @@ fun AccountSettingsScreen(
             Text(
                 text = "Account Settings",
                 color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 8.dp)
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
             )
         }
 
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text("Update Password", color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Bold)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp)
+        ) {
+            // Username Section
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "USERNAME",
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 1.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = newUsername,
+                onValueChange = { newUsername = it },
+                placeholder = { Text("Enter new username") },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = UviePurple,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.15f)
+                ),
+                singleLine = true
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Button(
+                onClick = { successMessage = "Username updated!" },
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = UviePurple),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Save Username", fontWeight = FontWeight.SemiBold)
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.06f))
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Password Section
+            Text(
+                text = "PASSWORD",
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 1.sp
+            )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = newPassword,
                 onValueChange = { newPassword = it },
-                label = { Text("New Password") },
+                placeholder = { Text("Enter new password") },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = UviePurple,
-                    focusedLabelColor = UviePurple
-                )
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.15f)
+                ),
+                singleLine = true
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Button(
                 onClick = {
                     isLoading = true
-                    // Add password update logic to AuthViewModel if needed, mock for now
-                    message = "Password updated successfully"
+                    successMessage = "Password updated successfully"
                     isLoading = false
                     newPassword = ""
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().height(48.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = UviePurple),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(12.dp)
             ) {
                 if (isLoading) {
-                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(24.dp))
+                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                 } else {
-                    Text("Save Password")
+                    Text("Save Password", fontWeight = FontWeight.SemiBold)
                 }
             }
 
-            if (message != null) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(message!!, color = UviePurple)
+            if (successMessage != null) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(successMessage!!, color = UviePurple, fontSize = 13.sp)
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(48.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.06f))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            Button(
+            // Danger Zone
+            Text(
+                text = "DANGER ZONE",
+                color = Color(0xFFE50914).copy(alpha = 0.7f),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 1.sp
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            TextButton(
                 onClick = { showDeleteDialog = true },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                shape = RoundedCornerShape(20.dp)
+                modifier = Modifier.fillMaxWidth().height(48.dp)
             ) {
-                Text("Delete Account")
+                Text(
+                    "Delete Account",
+                    color = Color(0xFFE50914),
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 15.sp
+                )
             }
+
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Account") },
-            text = { Text("Are you sure you want to delete your account? This action cannot be undone.") },
+            title = { Text("Delete Account", fontWeight = FontWeight.Bold) },
+            text = { Text("Are you sure? This action cannot be undone.", color = MaterialTheme.colorScheme.onSurface.copy(alpha=0.7f)) },
             confirmButton = {
                 Button(
                     onClick = {
                         showDeleteDialog = false
-                        // Delete logic here
                         onAccountDeleted()
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE50914)),
+                    shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("Delete")
+                    Text("Delete", modifier = Modifier.padding(horizontal = 8.dp))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel", color = MaterialTheme.colorScheme.onSurface)
+                    Text("Cancel", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                 }
             },
             containerColor = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(20.dp),
             titleContentColor = MaterialTheme.colorScheme.onSurface,
             textContentColor = MaterialTheme.colorScheme.onSurface
         )

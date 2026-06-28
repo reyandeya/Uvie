@@ -12,6 +12,9 @@ interface TmdbApi {
     @GET("movie/popular")
     suspend fun getPopularMovies(): MovieResponse
 
+    @GET("movie/upcoming")
+    suspend fun getUpcomingMovies(): MovieResponse
+
     @GET("movie/{movie_id}")
     suspend fun getMovieDetails(
         @Path("movie_id") movieId: Long

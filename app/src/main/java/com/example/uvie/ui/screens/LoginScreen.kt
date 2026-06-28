@@ -76,10 +76,10 @@ fun LoginScreen(
             Image(
                 painter = painterResource(id = R.drawable.logo_uvie),
                 contentDescription = "Uvie Logo",
-                modifier = Modifier.height(150.dp)
+                modifier = Modifier.height(100.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
                 value = email,

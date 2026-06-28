@@ -16,6 +16,7 @@ class MovieRepository {
     // TMDB API calls
     suspend fun getTrendingMovies() = tmdbApi.getTrendingMovies().results
     suspend fun getPopularMovies() = tmdbApi.getPopularMovies().results
+    suspend fun getUpcomingMovies() = tmdbApi.getUpcomingMovies().results
     suspend fun getMovieDetails(id: Long) = tmdbApi.getMovieDetails(id)
     suspend fun getMovieCredits(id: Long) = tmdbApi.getMovieCredits(id).cast
     suspend fun getSimilarMovies(id: Long) = tmdbApi.getSimilarMovies(id).results
@@ -58,7 +59,7 @@ class MovieRepository {
 
     suspend fun getUserMovieStatus(movieId: Long): String? {
         val user = supabase.auth.currentUserOrNull() ?: return null
-        val result = supabase.postgrest["user_movies"].select(columns = Columns.list("status")) {
+        val result = supabase.postgrest["user_movies"].select() {
             filter {
                 eq("user_id", user.id)
                 eq("movie_id", movieId)

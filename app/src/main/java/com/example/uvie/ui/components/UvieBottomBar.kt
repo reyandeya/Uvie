@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -14,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.foundation.layout.WindowInsets
 
 enum class UvieDestination(val route: String, val icon: ImageVector, val label: String) {
     HOME("home", Icons.Default.Home, "Home"),
@@ -31,7 +33,8 @@ fun UvieBottomBar(
 ) {
     NavigationBar(
         modifier = modifier,
-        containerColor = Color(0xFF141414)
+        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
+        windowInsets = WindowInsets(0, 0, 0, 0)
     ) {
         UvieDestination.entries.forEach { destination ->
             NavigationBarItem(
